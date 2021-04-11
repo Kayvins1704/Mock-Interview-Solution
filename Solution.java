@@ -42,7 +42,7 @@ public class Solution {
 			visited[p.node] = true;
 			if(graph.containsKey(p.node)){
 				for(Integer n : graph.get(p.node)){
-					q.addLast(new (n, p.steps+1));
+					q.addLast(new Pair(n, p.steps+1));
 				}
 			}
 		}
