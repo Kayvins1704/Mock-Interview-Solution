@@ -1,52 +1,45 @@
 public class Solution {
-	static class Pair{
-		int node, steps;
-		public Pair(int node, int steps){
-			this.node = node;
-			this.steps = steps;
-		}
-	}
-	public int solve(int[] arr){
-		int min = Integer.MAX_VALUE;
-		boolean[] visited = new boolean[arr.length];
-		Map<Integer, List<Integer>> graph = new HashMap<>();
-		Map<Integer, List<Integer>> eqMap = new HashMap<>();
-		
-		for(int i=0; i<arr.length; i++){
-			graph.putIfAbsent(i, new ArrayList<>());
-			if(i+1 < arr.length) graph.get(i).add(i+1);
-			if(i-1 >= 0) graph.get(i).add(i-1);
-			
-			if(eqMap.containsKey(arr[i])){
-				for(Integer node : eqMap.get(arr[i])){
-					graph.get(node).add(i);
-				}
-			}else{
-				eqMap.put(arr[i], new ArrayList<>());
-			}
-			
-			eqMap.get(arr[i]).add(i);
-		}
-		
-		Deque<Pair> q = new ArrayDeque<>();
-		
-		q.addLast(new Pair(0, 0));
-		
-		while(!q.isEmpty()){
-			Pair p = q.removeFirst();
-			if(visited[p.node]) continue;
-			if(p.node == arr.length - 1) {
-				min = Math.min(min, p.steps);
-				continue;
-			}
-			visited[p.node] = true;
-			if(graph.containsKey(p.node)){
-				for(Integer n : graph.get(p.node)){
-					q.addLast(new Pair(n, p.steps+1));
-				}
-			}
-		}
-		
-		return min;
-	}
+    public static int getMaxPathSum(int[] A, int[] B){
+        int i = 0;
+        int j = 0;
+
+        int m = A.length;
+        int n = B.length;
+
+        int sum = 0;
+        int sum1 = 0;
+        int sum2 = 0;
+
+        while(i<m && j<n){
+            if(A[i] < B[j]){
+                sum1 += A[i++];
+            }else if(A[i] > B[j]){
+                sum2 += B[j++];
+            }else{
+                sum += Math.max(sum1, sum2);
+                sum += A[i];
+                i++;
+                j++;
+                sum1 = 0;
+                sum2 = 0;
+            }
+        }
+
+        while(i<m){
+            sum1 += A[i++];
+        }
+
+        while(j<n){
+            sum2 += B[j++];
+        }
+
+        sum += Math.max(sum1, sum2);
+
+        return sum;
+    }
+    public static void main(String[] args) {
+        int[] A = {1,4,5,8,9,11,19};
+        int[] B = {2,3,4,11,12};
+        System.out.println(getMaxPathSum(A, B));
+    }
 }
